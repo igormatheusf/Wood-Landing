@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { insertContactMessageSchema } from "./schema";
 
+export { insertContactMessageSchema };
+
 export const errorSchemas = {
   validation: z.object({
     message: z.string(),
