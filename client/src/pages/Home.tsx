@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { insertContactMessageSchema } from "@shared/routes";
-import { useSubmitContact } from "@/hooks/use-contact";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ArrowRight, Utensils, GlassWater, Music, Users } from "lucide-react";
@@ -273,16 +272,14 @@ function ValuePropositionSection() {
 }
 
 function ContactSection() {
-  const { register, handleSubmit, formState: { errors }, reset } = useForm({
+  const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(insertContactMessageSchema),
   });
 
-  const mutation = useSubmitContact();
-
   const onSubmit = (data: any) => {
-    mutation.mutate(data, {
-      onSuccess: () => reset(),
-    });
+    const subject = encodeURIComponent("Solicitação de Orçamento - Espaço Wood");
+    const body = encodeURIComponent(`Nome: ${data.name}\nEmail: ${data.email}\nTelefone: ${data.phone}`);
+    window.location.href = `mailto:contato@espacowood.com.br?subject=${subject}&body=${body}`;
   };
 
   return (
@@ -353,10 +350,9 @@ function ContactSection() {
 
               <button
                 type="submit"
-                disabled={mutation.isPending}
-                className="w-full py-4 bg-accent text-white font-bold uppercase tracking-widest rounded-sm shadow-lg hover:bg-accent/90 transition-all transform active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed mt-4"
+                className="w-full py-4 bg-accent text-white font-bold uppercase tracking-widest rounded-sm shadow-lg hover:bg-accent/90 transition-all transform active:scale-[0.98] mt-4"
               >
-                {mutation.isPending ? "Enviando..." : "Enviar meu Orçamento"}
+                Enviar meu Orçamento
               </button>
             </form>
           </div>
